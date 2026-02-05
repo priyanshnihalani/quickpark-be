@@ -1,7 +1,8 @@
-const puppeteer = require("puppeteer");
+const { chromium } = require("playwright");
 
 async function generatePDF(html) {
-  const browser = await puppeteer.launch({
+
+  const browser = await chromium.launch({
     headless: true,
     args: [
       "--no-sandbox",
@@ -13,7 +14,7 @@ async function generatePDF(html) {
   const page = await browser.newPage();
 
   await page.setContent(html, {
-    waitUntil: "networkidle0"
+    waitUntil: "networkidle"
   });
 
   const pdfBuffer = await page.pdf({
@@ -22,6 +23,7 @@ async function generatePDF(html) {
   });
 
   await browser.close();
+
   return pdfBuffer;
 }
 
