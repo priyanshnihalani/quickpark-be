@@ -195,37 +195,37 @@ app.post("/api/pay", async (req, res) => {
   }
 });
 
-app.get("/ticket/download/:paymentId", async (req, res) => {
-  try {
-    const { paymentId } = req.params;
+// app.get("/ticket/download/:paymentId", async (req, res) => {
+//   try {
+//     const { paymentId } = req.params;
 
-    const data = {
-      paymentId,
-      amount: "35.00",
-      status: "AUTHORIZED",
-      time: new Date().toLocaleString("en-US")
-    };
+//     const data = {
+//       paymentId,
+//       amount: "35.00",
+//       status: "AUTHORIZED",
+//       time: new Date().toLocaleString("en-US")
+//     };
 
-    const templatePath = path.join(TEMPLATES_DIR, "ticket.ejs");
-    const html = await ejs.renderFile(templatePath, data);
-    const pdfBuffer = await generatePDF(html);
+//     const templatePath = path.join(TEMPLATES_DIR, "ticket.ejs");
+//     const html = await ejs.renderFile(templatePath, data);
+//     const pdfBuffer = await generatePDF(html);
 
-    res.writeHead(200, {
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="parking-ticket-${paymentId}.pdf"`,
-      "Content-Length": pdfBuffer.length
-    });
+//     res.writeHead(200, {
+//       "Content-Type": "application/pdf",
+//       "Content-Disposition": `attachment; filename="parking-ticket-${paymentId}.pdf"`,
+//       "Content-Length": pdfBuffer.length
+//     });
 
-    res.end(pdfBuffer);
+//     res.end(pdfBuffer);
 
-  } catch (err) {
-    console.error("PDF Error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to generate ticket PDF"
-    });
-  }
-});
+//   } catch (err) {
+//     console.error("PDF Error:", err);
+//     res.status(500).json({
+//       success: false,
+//       message: "Failed to generate ticket PDF"
+//     });
+//   }
+// });
 
 
 
