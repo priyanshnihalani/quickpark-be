@@ -1,12 +1,15 @@
-const puppeteer = require("puppeteer");
+import puppeteer from "puppeteer";
 
-async function generatePDF(html) {
+export async function generatePDF(html) {
   const browser = await puppeteer.launch({
-    headless: true,
+    executablePath: "/usr/bin/chromium",
+    headless: "new",
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage"
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--single-process"
     ]
   });
 
@@ -16,13 +19,11 @@ async function generatePDF(html) {
     waitUntil: "networkidle0"
   });
 
-  const pdfBuffer = await page.pdf({
+  const pdf = await page.pdf({
     format: "A4",
     printBackground: true
   });
 
   await browser.close();
-  return pdfBuffer;
+  return pdf;
 }
-
-module.exports = { generatePDF };
