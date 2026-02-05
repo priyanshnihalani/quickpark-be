@@ -19,6 +19,6 @@
     "ejs": "^4.0.1",
     "express": "^5.2.1",
     "nodemailer": "^7.0.13",
-    "playwright": "^1.58.1"
+    "puppeteer": "^22.15.0"
   }
 }
