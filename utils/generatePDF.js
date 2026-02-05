@@ -1,10 +1,25 @@
 const puppeteer = require("puppeteer");
 
 async function generatePDF(html) {
-  const browser = await puppeteer.launch();
+
+  const browser = await puppeteer.launch({
+    headless: "new", 
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+      "--no-first-run",
+      "--no-zygote",
+      "--single-process"
+    ]
+  });
+
   const page = await browser.newPage();
 
-  await page.setContent(html, { waitUntil: "networkidle0" });
+  await page.setContent(html, {
+    waitUntil: "networkidle0"
+  });
 
   const pdfBuffer = await page.pdf({
     format: "A4",
