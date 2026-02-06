@@ -3,13 +3,12 @@ const cors = require("cors");
 const cybersourceRestApi = require("cybersource-rest-client");
 const path = require("path");
 const ejs = require("ejs");
-const { generatePDF } = require("./utils/generatePDF");
+const generatePDF  = require("./utils/generatePDF");
+require("dotenv").config();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +17,6 @@ const TEMPLATES_DIR = path.join(__dirname, "templates");
 
 app.set("view engine", "ejs");
 app.set("views", TEMPLATES_DIR);
-
 /* ================= CYBERSOURCE CONFIG ================= */
 
 const cyberSourceConfig = {
@@ -195,37 +193,37 @@ app.post("/api/pay", async (req, res) => {
   }
 });
 
-// app.get("/ticket/download/:paymentId", async (req, res) => {
-//   try {
-//     const { paymentId } = req.params;
+app.get("/ticket/download/:paymentId", async (req, res) => {
+  try {
+    const { paymentId } = req.params;
 
-//     const data = {
-//       paymentId,
-//       amount: "35.00",
-//       status: "AUTHORIZED",
-//       time: new Date().toLocaleString("en-US")
-//     };
+    const data = {
+      paymentId,
+      amount: "35.00",
+      status: "AUTHORIZED",
+      time: new Date().toLocaleString("en-US")
+    };
 
-//     const templatePath = path.join(TEMPLATES_DIR, "ticket.ejs");
-//     const html = await ejs.renderFile(templatePath, data);
-//     const pdfBuffer = await generatePDF(html);
+    const templatePath = path.join(TEMPLATES_DIR, "ticket.ejs");
+    const html = await ejs.renderFile(templatePath, data);
+    const pdfBuffer = await generatePDF(html);
 
-//     res.writeHead(200, {
-//       "Content-Type": "application/pdf",
-//       "Content-Disposition": `attachment; filename="parking-ticket-${paymentId}.pdf"`,
-//       "Content-Length": pdfBuffer.length
-//     });
+    res.writeHead(200, {
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="parking-ticket-${paymentId}.pdf"`,
+      "Content-Length": pdfBuffer.length
+    });
 
-//     res.end(pdfBuffer);
+    res.end(pdfBuffer);
 
-//   } catch (err) {
-//     console.error("PDF Error:", err);
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to generate ticket PDF"
-//     });
-//   }
-// });
+  } catch (err) {
+    console.error("PDF Error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate ticket PDF"
+    });
+  }
+});
 
 
 
