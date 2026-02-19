@@ -3,7 +3,7 @@ const cors = require("cors");
 const cybersourceRestApi = require("cybersource-rest-client");
 const path = require("path");
 const ejs = require("ejs");
-const generatePDF  = require("./utils/generatePDF");
+const generatePDF = require("./utils/generatePDF");
 require("dotenv").config();
 
 const app = express();
@@ -112,15 +112,20 @@ app.post("/api/pay", async (req, res) => {
         });
       }
 
-      let parsedToken = walletToken;
+      // If token comes as string convert to object
+      const parsedToken =
+        typeof walletToken === "string"
+          ? JSON.parse(walletToken)
+          : walletToken;
 
-      // token may arrive as string
-      if (typeof walletToken === "string") {
-        parsedToken = JSON.parse(walletToken);
-      }
+      // ⚠️ For Apple Pay we must send only token.paymentData
+      const applePaymentData =
+        paymentMethod === "APPLE_PAY"
+          ? parsedToken.paymentData
+          : parsedToken;
 
       const encodedToken = Buffer.from(
-        JSON.stringify(parsedToken),
+        JSON.stringify(applePaymentData),
         "utf8"
       ).toString("base64");
 
