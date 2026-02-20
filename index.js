@@ -21,10 +21,10 @@ app.set("views", TEMPLATES_DIR);
 
 const cyberSourceConfig = {
   authenticationType: "http_signature",
-  merchantID: process.env.CYBS_MERCHANT_ID,
-  merchantKeyId: process.env.CYBS_KEY_ID,
-  merchantsecretKey: process.env.CYBS_SECRET_KEY,
-  runEnvironment: process.env.CYBS_HOST,
+  merchantID: "evalwfencore",
+  merchantKeyId: "d1ea3d2f-f0b9-40b1-9d85-6ed3e481f832",
+  merchantsecretKey: "kMzN7YTnsLRbNsrfgOdpCnI0653pAJnmZYY5+7EdlA8=",
+  runEnvironment: "apitest.cybersource.com",
   logConfiguration: {
     enableLog: true,
     logFileName: "cybs",
